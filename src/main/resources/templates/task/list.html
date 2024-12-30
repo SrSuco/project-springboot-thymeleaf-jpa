@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout/base :: content">
+<head>
+    <title>Tasks</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<h2>Tasks</h2>
+<table id="taskTable">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="task : ${tasks}" id="task-${task.id}">
+        <td th:text="${task.title}"></td>
+        <td th:text="${task.status}"></td>
+        <td>
+            <a th:href="@{/tasks/{id}(id=${task.id})}">View</a>
+            <a th:href="@{/tasks/{id}/edit(id=${task.id})}">Edit</a>
+            <a th:href="@{/tasks/{id}/delete(id=${task.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    const socket = new SockJS('/ws');
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function () {
+        stompClient.subscribe('/topic/tasks', function (message) {
+            const task = JSON.parse(message.body);
+            updateTaskTable(task);
+        });
+    });
+
+    function updateTaskTable(task) {
+        const table = document.getElementById("taskTable").getElementsByTagName("tbody")[0];
+        if (task) {
+            let row = document.getElementById(`task-${task.id}`);
+            if (!row) {
+                row = table.insertRow();
+                row.id = `task-${task.id}`;
+            }
+            row.innerHTML = `
+                    <td>${task.title}</td>
+                    <td>${task.status}</td>
+                    <td>
+                        <a href="/tasks/${task.id}">View</a>
+                        <a href="/tasks/${task.id}/edit">Edit</a>
+                        <a href="/tasks/${task.id}/delete" onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>`;
+        } else {
+            const rows = table.rows;
+            for (let i = 0; i < rows.length; i++) {
+                if (rows[i].id === `task-${task.id}`) {
+                    table.deleteRow(i);
+                    break;
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>

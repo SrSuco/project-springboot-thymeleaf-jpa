@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout/base :: content">
+<head>
+    <title>Projects</title>
+</head>
+<body>
+<h2>Projects</h2>
+<a href="/projects/new">Create New Project</a>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="project : ${projects}">
+        <td th:text="${project.name}"></td>
+        <td th:text="${project.description}"></td>
+        <td>
+            <a th:href="@{/projects/{id}(id=${project.id})}">View</a>
+            <a th:href="@{/projects/{id}/edit(id=${project.id})}">Edit</a>
+            <a th:href="@{/projects/{id}/delete(id=${project.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

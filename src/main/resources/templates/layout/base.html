@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Management</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <h1>Task Management System</h1>
+</header>
+<main>
+    <div th:replace="~{layout/navbar :: navbar}"></div>
+    <div>
+        <div th:insert="~{layout/messages :: messages}"></div>
+        <div th:fragment="content">Content goes here...</div>
+    </div>
+</main>
+<footer>
+    <p>© 2024 Task Management</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout/base :: content">
+<head>
+    <title>Task Details</title>
+</head>
+<body>
+<h2>Task Details</h2>
+
+<div>
+    <p><strong>Title:</strong> <span th:text="${task.title}"></span></p>
+    <p><strong>Description:</strong> <span th:text="${task.description}"></span></p>
+    <p><strong>Status:</strong> <span th:text="${task.status}"></span></p>
+    <p><strong>Project:</strong> <span th:text="${task.project.name}"></span></p>
+    <p><strong>Assigned To:</strong> <span th:text="${task.assignedTo.name}"></span></p>
+    <p><strong>Created At:</strong> <span th:text="${task.createdAt}"></span></p>
+</div>
+
+<a href="/tasks">Back to Tasks</a>
+</body>
+</html>
